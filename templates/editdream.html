@@ -1,0 +1,36 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<section class="pane">
+	<div class="title">
+		<h1>Edit Dream</h1>
+	</div>
+</section>
+
+<div class="row">
+	<form action="#" method = "post">
+			<div class="form">
+				<label for="title">Title:</label>
+				<input type ="text" maxlength="250" class="form-control" name="title" value="{{item.title}}">
+
+				<label for="description">Description:</label>
+				<textarea class="form-control" maxlength="250" rows="3" name="description">{{item.description}}</textarea>
+
+				<label for="emotion">Emotion:</label>
+				<input type ="text" class="form-control" maxlength="80" name="emotion" value="{{item.emotion}}">
+
+
+				<label for="date">Enter the date</label>
+				<input class="form-control" name="date" type="date" value="{{item.dream_date}}">
+									
+				<button type="submit" class="btn" id="submit" type="submit">
+				<span class="fa fa-plus" aria-hidden="true"></span> Save</button>
+			</div>
+	</form>
+	<a href= "{{url_for('showDreams', category_id=category_id)}}">
+	<button class="btn"><span class="fa fa-ban"></span> Cancel</button></a>
+
+</div>
+
+
+{% endblock %}

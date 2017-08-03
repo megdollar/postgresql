@@ -1,0 +1,337 @@
+/*-------------
+ 	General
+-------------*/
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font: normal 16px sans-serif;
+	color: #fff;
+}
+
+.container {
+	min-height: 100vh;
+	background-color: #000;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+}
+
+ul, nav{
+	list-style: none;
+}
+
+
+a, .btn {
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+	opacity: 0.9;
+}
+
+a:hover, .btn:hover{
+	opacity: 1;
+}
+
+
+a.btn, .btn {
+	color: #000;
+	border-radius: 4px;
+	text-transform: uppercase;
+	background-color: #fff;
+	font-weight: 800;
+	text-align: center;
+}
+
+
+/*-------------
+ 	Header
+-------------*/
+
+header{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #fff;
+	padding: 35px 100px 0;
+}
+
+header h2{
+	font-family: 'Quicksand', sans-serif;
+}
+
+header nav{
+	display: flex;
+}
+
+header nav li{
+	margin: 0 15px;
+}
+
+header nav li:first-child{
+	margin-left: 0;	
+}
+
+header nav li:last-child{
+	margin-right: 0;	
+}
+
+/*----------------
+ 	Hero Section
+----------------*/
+
+.hero {
+	position: relative;
+	justify-content: center;
+	min-height: 100vh;
+	color: #fff;
+	text-align: center;
+}
+.hero .backgroundImage{
+	background-image: url("star-large.jpg");
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+}
+
+
+.hero h1{
+	margin-top: 20%;
+	font: bold 60px 'Open Sans', sans-serif;
+	margin-bottom: 40px;
+}
+
+.hero h3{
+	font: normal 28px 'Open Sans', sans-serif;
+	margin-bottom: 40px;
+}
+
+
+.hero a.btn{
+	display: inline-block;
+	padding: 20px 46px;
+}
+
+@media screen and (max-width: 800px){
+
+	.hero{
+		min-height: 600px;
+	}
+
+	.hero h1{
+		font-size: 48px;
+	}
+
+	.hero h3{
+		font-size: 24px;
+	}
+
+	.hero a.btn{
+		padding: 15px 40px;
+	}
+
+}
+@media screen and (max-width: 500px){
+    .hero h1 {
+        margin-top: 40px;
+    }  
+}
+
+/*----------------
+ 	Pane Section
+----------------*/
+
+.pane {
+	background-image: url("star-large.jpg");
+	position: relative;
+	justify-content: center;
+	text-align: center;
+	min-height: 50vh;
+/*	background-color: #000;*/
+
+}
+
+.pane .title{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.pane h1{
+	margin-top: 20%;
+	font: bold 60px 'Open Sans', sans-serif;
+	margin-bottom: 15px;
+}
+
+
+
+/*----------------
+ 	content Section
+----------------*/
+.flash {
+	padding-top: 20px;
+	text-align: center;
+	font-style: italic;
+	width: 100%;
+	padding-bottom: 20px;
+}
+
+.flash li {
+	font-size: 24px;
+	padding-bottom: 20px;
+}
+
+.content {
+	display: flex;
+	flex-wrap: wrap;
+	text-align: center;
+	justify-content: center;
+
+}
+
+.content .row {
+	width: 75%;
+	padding: 20px;
+	border-radius: 15px;
+	background-color: black;
+	margin: 15px;
+
+}
+
+.content h3{
+	font: normal 28px 'Open Sans', sans-serif;
+	margin-bottom: 40px;
+}
+.content p {
+	padding-bottom: 30px;
+	line-height: 1.6;
+}
+
+.content a.btn{
+	display: inline-block;
+	padding: 14px 20px;
+}
+@media (max-width: 600px){
+
+	.content .row{
+		flex-basis: 100%;
+	}
+
+}
+@media (min-width: 1000px){
+
+	.content .row {
+		flex-basis: 30%;
+		margin-bottom: 65px;
+	}
+
+
+}
+/*----------------
+ 	Main Section
+----------------*/
+.main .btn, .home .btn{
+	float: right;
+	border: 1px solid #fff;
+	margin-right: 20px;
+	margin-bottom: 20px;
+
+}
+
+.main h3, .main p {
+	width: 60%;
+	float: left;
+}
+
+img {
+	border-radius: 15px;
+	margin: .5% 1% 1% 18%;
+}
+
+
+@media screen and (max-width: 950px){
+	.main .btn, .home .btn{
+		float: none;
+	}
+	.home .btn{
+		margin: 10px;
+	}
+
+	.main h3, .main p {
+		float: none;
+		width: 100%;
+	}
+	.main {
+		margin-top: 30px;
+	}
+	img {
+		display: block;
+		margin: 0 auto;
+		margin-bottom: 20px;
+	}
+
+}
+
+
+}
+@media screen and (min-width: 1200px) {
+	.main {
+		margin-right: 30px;
+		margin-left: 30px;
+	}
+
+}
+@media screen and (min-width: 1400px) {
+	img {
+		margin: .5% 1% 1% 24%;
+	}
+
+}
+
+
+/*----------------
+ 	Form Section
+----------------*/
+form {
+	text-align: center;
+}
+.form label {
+	display: block;
+	font: normal 28px 'Open Sans', sans-serif;
+	margin-bottom: 20px;
+}
+.form-control {
+	font: normal 16px 'Open Sans', sans-serif;
+	padding: 10px;
+	line-height: 1.6;
+	border-radius: 15px;
+	margin-bottom: 20px;
+
+}
+form textarea {
+	width: 50%;
+}
+
+form .btn, .row .btn {
+	display: block;
+	padding: 14px 26px;
+	border: 1px solid #fff;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}

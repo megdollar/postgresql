@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+
+	<section class="hero">
+		<div class="backgroundImage">
+			<h1>In Your Dreams</h1>
+			<h3>A diary to catalog your dreams</h3>
+			<a href="{{url_for('showCategories')}}" class="btn">Enter</a>
+		</div>
+	</section>
+	
+
+{% endblock %}

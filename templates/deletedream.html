@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<section class="pane">
+	<div class="title">
+		<h1> Are you sure you want to delete {{item.title}}? </h1>
+	</div>
+</section>
+
+<div class="row">
+	<form action="#" method = "post">
+			<div class="form">
+				<button type="submit" class="btn" id="submit" type="submit">
+				<span class="fa fa-trash" aria-hidden="true"></span> Delete</button>
+			</div>
+	</form>
+	<a href= "{{url_for('showDreams', category_id = item.category_id)}}">
+	<button class="btn"><span class="fa fa-ban"></span> Cancel</button></a>
+
+</div>
+
+
+{% endblock %}

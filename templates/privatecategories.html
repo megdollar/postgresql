@@ -1,0 +1,44 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<section class="pane">
+	<div class="title">
+		<h1>Categories</h1>
+	</div>
+</section>
+
+
+<section class="content">
+	<div class = 'flash'>
+	{% with messages = get_flashed_messages() %}
+    	{% if messages %}         
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+	</div>
+
+
+	<div class="home">
+		<a href="{{url_for('newCategory')}}" class="btn create"><span class="fa fa-plus"></span> Create</a>
+
+		{% for category in categories %}
+		<div class="main">
+			<h3>{{category.name}}</h3>
+			<p>{{category.description}}</p>
+			<a href="{{url_for('deleteCategory', category_id=category.id)}}" class="btn"><span class="fa fa-trash"></span> Delete</a>
+			<a href="{{url_for('editCategory', category_id=category.id)}}" class="btn"><span class="fa fa-plus"></span> Edit</a>
+			<a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><span class="fa fa-eye"></span>View</a>
+		</div>
+		{% endfor %}
+	</div>
+</section>
+
+
+
+
+{% endblock %}
