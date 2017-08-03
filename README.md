@@ -5,7 +5,7 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
 
 ### Getting Set Up:
 
-#### System Requirements:
+### System Requirements:
 1. [Python3](https://www.python.org/)
 2. [Vagrant](https://www.vagrantup.com/)
   * This is the software that configures the Virtual machine
@@ -16,13 +16,13 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
   * Don't launch after installing, Vagrant handles this for you
  4. [Udacity Vagrant Machine](https://github.com/udacity/fullstack-nanodegree-vm)
 
-#### Project Setup:
+### Project Setup:
 1. Install Python3 
 2. Install Vagrant
 3. Install Virtual Box
 4. Download or clone the Udacity Vagrant Machine repository and place it in the vagrant directory
 
-#### Launch the VM:
+### Launch the VM:
 1. Inside the Vagrant directory downloaded from the full-stack-nanodegree-vm run this command in your terminal
    `vagrant up`
 2. Log in to the VM 
@@ -30,7 +30,7 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
 3. Change directory to the files and look around
    `cd /vagrant' 'ls' `
    
-#### Set Up the Database:
+### Set Up the Database:
 1. Load the data in the local database
    `python database_setup.py`
 2. Populate the database
@@ -57,7 +57,7 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
 6. Add `http://localhost:5000/` to the Valid OAuth redirect URIs section
 7. Replace app_id and app_secret in fb_client_secrets.json file
 
-#### Run the Application:
+### Run the Application:
 1. From the vagrant direcotry inside the VM
    `python project.py`
 2. Navigate to [http://localhost:5000/](http://localhost:5000/) in your browser
