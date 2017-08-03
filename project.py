@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect
+from flask import jsonify, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
@@ -26,86 +27,115 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
 # Create a state token to prevent request forgery
-#Store it in the session for later use
+# Store it in the session for later use
 @app.route('/login/')
 def showLogin():
-    state=''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
     login_session['state'] = state
     return render_template('login.html', STATE=state)
+
 
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid state parameter.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return resPaj('Invalid state parameter.', 401)
     access_token = request.data
-    print "access token received %s " % access_token
 
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
-        'web']['app_id']
-    app_secret = json.loads(
-        open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-        app_id, app_secret, access_token)
+    # Exchange client token for long-lived server-side token with GET
+    # /oauth/access_token?grant_type=fb_exchange_token&client_id={app-
+    # id}&client_secret={app-secret}&fb_exchange_token={short-lived-token}
+    app_id = json.loads(open('fb_client_secrets.json', 'r').read()
+                        )['web']['app_id']
+    app_secret = json.loads(open('fb_client_secrets.json', 'r').read()
+                            )['web']['app_secret']
+    url = 'https://graph.facebook.com/v2.9/oauth/access_token?'\
+          'grant_type=fb_exchange_token&client_id=%s&client_secret=%s'\
+          '&fb_exchange_token=%s' % (app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
+    print result
 
     # Use token to get user info from API
-    userinfo_url = "https://graph.facebook.com/v2.8/me"
-    token = result.split(',')[0].split(':')[1].replace('"', '')
+    userinfo_url = "https://graph.facebook.com/v2.2/me"
+    # strip expire tag from access token
+    data = json.loads(result)
+    token = 'access_token=' + data['access_token']
 
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
+    url = 'https://graph.facebook.com/v2.8/me?%s&fields=name,id,email' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
-    # print "url sent for API access:%s"% url
-    # print "API JSON result: %s" % result
-    data = json.loads(result)
-    login_session['provider'] = 'facebook'
-    login_session['username'] = data.get("name")
-    login_session['email'] = data.get("email")
-    login_session['facebook_id'] = data["id"]
+    print 'new result:'
+    print result
 
-    # The token must be stored in the login_session in order to properly logout
-    login_session['access_token'] = token
+    data = json.loads(result)
+    print data
+    login_session['provider'] = 'facebook'
+    login_session['username'] = data['name']
+    login_session['email'] = data.get('email')
+    if login_session['email'] is None:
+        login_session['email'] = 'facebook@facebook.com'
+    login_session['facebook_id'] = data['id']
 
     # Get user picture
-    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
+    url = 'https://graph.facebook.com/v2.2/me/picture?%s&redirect=0&'\
+          'height=200&width=200' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
+    print 'result with pic:'
+    print result
     data = json.loads(result)
+    print data
 
-    login_session['picture'] = data["data"]["url"]
+    login_session['picture'] = data['data']['url']
 
-    # see if user exists
+    # check if user exists
     user_id = getUserID(login_session['email'])
     if not user_id:
-        user_id = createUser(login_session)
+        user_id = createUserE(login_session)
     login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
-
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-
-    flash("Now logged in as %s" % login_session['username'])
+    output += ' " style = "width: 160px; height: 160px;'
+    output += 'border-radius: 80px; -webkit-border-radius: 80px;'
+    output += '-moz-border-radius: 80px;"> '
+    flash("you are now logged in as %s" % login_session['username'])
+    print "done!"
     return output
 
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
+    """Logout via Facebook OAuth."""
     facebook_id = login_session['facebook_id']
-    # The access token must me included to successfully logout
-    access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
-    return "you have been logged out"
+
+    # The access token must be included to successfully logout.
+    access_token = login_session.get('access_token')
+
+    url = ('https://graph.facebook.com/%s/permissions?'
+           'access_token=%s') % (facebook_id, access_token)
+
+    http = httplib2.Http()
+    result = http.request(url, 'DELETE')[1]
+
+    if result == '{"success":true}':
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'), 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -115,7 +145,8 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     # Obtain authorization code
-    code = request.data  
+    code = request.data
+
     try:
         # Upgrade the authorization code into a credentials object
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
@@ -126,6 +157,7 @@ def gconnect():
             json.dumps('Failed to upgrade the authorization code.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+
     # Check that the access token is valid.
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
@@ -137,6 +169,7 @@ def gconnect():
         response = make_response(json.dumps(result.get('error')), 500)
         response.headers['Content-Type'] = 'application/json'
         return response
+
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
@@ -144,6 +177,7 @@ def gconnect():
             json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
@@ -152,10 +186,11 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    stored_access_token = login_session.get('access_token')
+    stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
-    if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
+    if stored_credentials is not None and gplus_id == stored_gplus_id:
+        response = make_response(json.dumps('Current user is'
+                                            ' already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -163,6 +198,7 @@ def gconnect():
     # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
+
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
@@ -188,10 +224,12 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;"\
+                "-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
+
 
 # User Helper Functions
 def createUser(login_session):
@@ -215,36 +253,27 @@ def getUserID(email):
     except:
         return None
 
+
 # DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect/')
 def gdisconnect():
-    access_token = login_session.get('access_token')
-    if access_token is None:
-        print 'Access Token is None'
-        response = make_response(json.dumps('Current user not connected.'), 401)
+    # Only disconnect a connected user.
+    credentials = login_session.get('access_token')
+    if credentials is None:
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % credentials
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
-    if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        del login_session['picture']
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
+    if result['status'] != '200':
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
         return response
-    else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
+
 
 # Disconnect based on provider
 @app.route('/disconnect/')
@@ -253,7 +282,7 @@ def disconnect():
         if login_session['provider'] == 'google':
             gdisconnect()
             del login_session['gplus_id']
-            del login_session['credentials']
+            del login_session['access_token']
         if login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
@@ -296,13 +325,15 @@ def categoryJSON():
 def homepage():
     return render_template('index.html')
 
+
 # Show all categories
 @app.route('/dreams/')
 def showCategories():
-    categories = session.query(Category).order_by(asc(Category.name)) 
+    categories = session.query(Category).order_by(asc(Category.name))
     if 'username' not in login_session:
         return render_template('publiccategories.html', categories=categories)
     return render_template('privatecategories.html', categories=categories)
+
 
 # Create new category
 @app.route('/dreams/new/', methods=['GET', 'POST'])
@@ -311,13 +342,15 @@ def newCategory():
         return redirect('/login')
     if request.method == 'POST':
         newCategory = Category(
-            name=request.form['name'], description=request.form['description'], user_id=login_session['user_id'])
+            name=request.form['name'], description=request.form['description'],
+            user_id=login_session['user_id'])
         session.add(newCategory)
         flash('New dream category %s successfully created' % newCategory.name)
         session.commit()
         return redirect(url_for('showCategories'))
     else:
         return render_template('newcategory.html')
+
 
 # Edit category
 @app.route('/dreams/<int:category_id>/edit/', methods=['GET', 'POST'])
@@ -326,7 +359,8 @@ def editCategory(category_id):
     if 'username' not in login_session:
         return redirect('/login')
     if editedCategory.user_id != login_session['user_id']:
-        flash('You are not authorized to edit this category. Please create your own category to edit.')
+        flash('You are not authorized to edit this category.'
+              'Please create your own category to edit.')
         return redirect(url_for('showCategories'))
     if request.method == 'POST':
         if request.form['name']:
@@ -338,6 +372,7 @@ def editCategory(category_id):
     else:
         return render_template('editcategory.html', category=editedCategory)
 
+
 # Delete category
 @app.route('/dreams/<int:category_id>/delete/', methods=['GET', 'POST'])
 def deleteCategory(category_id):
@@ -345,15 +380,18 @@ def deleteCategory(category_id):
     if 'username' not in login_session:
         return redirect('/login')
     if categoryToDelete.user_id != login_session['user_id']:
-        flash('You are not authorized to delete this category. Please create your own category to delete.')
-        return redirect(url_for('showCategories'))    
+        flash('You are not authorized to delete this category.'
+              ' Please create your own category to delete.')
+        return redirect(url_for('showCategories'))
     if request.method == 'POST':
         session.delete(categoryToDelete)
         flash('%s Successfully Deleted' % categoryToDelete.name)
         session.commit()
         return redirect(url_for('showCategories', category_id=category_id))
     else:
-        return render_template('deletecategory.html', category=categoryToDelete)
+        return render_template('deletecategory.html',
+                               category=categoryToDelete)
+
 
 # Show items in category
 @app.route('/dreams/<int:category_id>/')
@@ -363,9 +401,12 @@ def showDreams(category_id):
     creator = getUserInfo(category.user_id)
     items = session.query(Item).filter_by(category_id=category_id).all()
     if 'username' not in login_session:
-        return render_template('publicdreams.html', items=items, category=category, creator=creator)
+        return render_template('publicdreams.html', items=items,
+                               category=category, creator=creator)
     else:
-        return render_template('privatedreams.html', items=items, category=category, creator=creator)
+        return render_template('privatedreams.html', items=items,
+                               category=category, creator=creator)
+
 
 # Create new dream
 @app.route('/dreams/<int:category_id>/dream/new/', methods=['GET', 'POST'])
@@ -374,26 +415,33 @@ def newDream(category_id):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-            newItem = Item(title=request.form['title'], description=request.form['description'], emotion=request.form[
-                               'emotion'], dream_date=datetime.datetime.strptime(request.form['date'], '%Y-%m-%d'), category_id=category_id, user_id=category.user_id)
+            newItem = Item(title=request.form['title'],
+                           description=request.form['description'],
+                           emotion=request.form['emotion'],
+                           dream_date=datetime.datetime.strptime(
+                           request.form['date'], '%Y-%m-%d'),
+                           category_id=category_id,
+                           user_id=category.user_id)
             session.add(newItem)
             session.commit()
             flash('New Dream Entry %s Successfully Created' % (newItem.title))
             return redirect(url_for('showDreams', category_id=category_id))
     else:
         return render_template('newdream.html', category_id=category_id)
-   
+
 
 # Edit dream
-@app.route('/dreams/<int:category_id>/dream/<int:item_id>/edit', methods=['GET', 'POST'])
+@app.route('/dreams/<int:category_id>/dream/<int:item_id>/edit',
+           methods=['GET', 'POST'])
 def editDream(category_id, item_id):
     editedItem = session.query(Item).filter_by(id=item_id).one()
     category = session.query(Category).filter_by(id=category_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     if login_session['user_id'] != category.user_id:
-        flash('You are not authorized to edit this dream. Please create your own dream to edit.')
-        return redirect(url_for('showDreams', category_id=category_id))   
+        flash('You are not authorized to edit this dream.'
+              ' Please create your own dream to edit.')
+        return redirect(url_for('showDreams', category_id=category_id))
     if request.method == 'POST':
         if request.form['title']:
             editedItem.title = request.form['title']
@@ -402,24 +450,29 @@ def editDream(category_id, item_id):
         if request.form['emotion']:
             editedItem.emotion = request.form['emotion']
         if request.form['date']:
-             editedItem.dream_date = datetime.datetime.strptime(request.form['date'], '%Y-%m-%d')
+            editedItem.dream_date = datetime.datetime.strptime(
+                                    request.form['date'], '%Y-%m-%d')
         session.add(editedItem)
         session.commit()
         flash('Dream Entry Successfully Edited')
         return redirect(url_for('showDreams', category_id=category_id))
     else:
-        return render_template('editdream.html', category_id=category_id, item_id=item_id, item=editedItem)
+        return render_template('editdream.html', category_id=category_id,
+                               item_id=item_id, item=editedItem)
+
 
 # Delete dream
-@app.route('/dreams/<int:category_id>/dream/<int:item_id>/delete/', methods=['GET', 'POST'])
+@app.route('/dreams/<int:category_id>/dream/<int:item_id>/delete/',
+           methods=['GET', 'POST'])
 def deleteDream(category_id, item_id):
     category = session.query(Category).filter_by(id=category_id).one()
     itemToDelete = session.query(Item).filter_by(id=item_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     if login_session['user_id'] != category.user_id:
-        flash('You are not authorized to delete this dream. Please create your own dream to delete.')
-        return redirect(url_for('showDreams', category_id=category_id)) 
+        flash('You are not authorized to delete this dream. '
+              'Please create your own dream to delete.')
+        return redirect(url_for('showDreams', category_id=category_id))
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
@@ -429,9 +482,8 @@ def deleteDream(category_id, item_id):
         return render_template('deletedream.html', item=itemToDelete)
 
 
-
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-
+    
