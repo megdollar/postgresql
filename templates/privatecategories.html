@@ -4,7 +4,7 @@
 
 <section class="pane">
 	<div class="title">
-		<h1>Categories</h1>
+		<h1>Dreams</h1>
 	</div>
 </section>
 
@@ -30,11 +30,14 @@
 <!--    <div class="main -->
 		{% for category in categories %}
 		<div class="row">
+            <img class="catPhoto" src="{{category.image}}">
 			<h3>{{category.name}}</h3>
 			<p>{{category.description}}</p>
-            <a href="{{url_for('deleteCategory', category_id=category.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
-            <a href="{{url_for('editCategory', category_id=category.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
-            <a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><i class="fa fa-eye"></i><span class="text-on-hover">View</span></a>
+            <div class="btnRow">
+                <a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><i class="fa fa-eye"></i><span class="text-on-hover">View</span></a>
+                <a href="{{url_for('editCategory', category_id=category.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
+                <a href="{{url_for('deleteCategory', category_id=category.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
+            </div>
 		</div>
 		{% endfor %}
 <!--	</div>-->

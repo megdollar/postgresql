@@ -14,7 +14,9 @@ import json
 from flask import make_response
 import requests
 
+
 app = Flask(__name__)
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -343,6 +345,7 @@ def newCategory():
     if request.method == 'POST':
         newCategory = Category(
             name=request.form['name'], description=request.form['description'],
+            image=request.form['image'],
             user_id=login_session['user_id'])
         session.add(newCategory)
         flash('New dream category %s successfully created' % newCategory.name)
@@ -367,6 +370,8 @@ def editCategory(category_id):
             editedCategory.name = request.form['name']
         if request.form['description']:
             editedCategory.description = request.form['description']
+        if request.form['image']:
+            editedCategory.image = request.form['image']
         flash('Category successfully edited %s' % editedCategory.name)
         return redirect(url_for('showCategories'))
     else:

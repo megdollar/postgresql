@@ -23,14 +23,15 @@
 	</div>
 {% for category in categories %}
 	<div class="row">
-	    <img class="catIcon" src="{{category.img}}">
+	    <img class="catPhoto" src="{{category.image}}">
 		<h3>{{category.name}}</h3>
 		<p>{{category.description}}</p>
-        <a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><i class="fa fa-eye"></i><span class="text-on-hover">View</span></a>
+        <div class="btnRow">
+            <a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><i class="fa fa-eye"></i><span class="text-on-hover">View</span></a>
+        </div>
 	</div>
 {% endfor %}
 </section>
-
 
 
 

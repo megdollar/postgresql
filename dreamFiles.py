@@ -47,7 +47,7 @@ def RandomDate(years=1):
 # Add Recurring Dream category and item
 category1 = Category(user_id=1, name="Recurring",
                      description="Repeating dreams are signs that we are not "
-                     "paying attention to the message given.")
+                     "paying attention to the message given.", image="https://github.com/megdollar/DreamApp/blob/master/images/recurring.png?raw=true")
 
 session.add(category1)
 session.commit()
@@ -66,7 +66,7 @@ category2 = Category(user_id=1, name="Nightmare",
                      description="These are the most emotionally draining of "
                      "all dreams. They may represent issues in our waking "
                      "lives that the subconscious drives the sleeper to "
-                     "acknowledge through fear.")
+                     "acknowledge through fear.", image="https://github.com/megdollar/DreamApp/blob/master/images/nightmare.png?raw=true")
 
 session.add(category2)
 session.commit()
@@ -84,7 +84,7 @@ category3 = Category(user_id=1, name="Lucid",
                      description="In these dreams the sleeper is actually "
                      "aware that they are in a dream state. The dream is "
                      "so vivid it seems real, although events and characters "
-                     "will often be greatly exaggerated.")
+                     "will often be greatly exaggerated.", image="https://github.com/megdollar/DreamApp/blob/master/images/lucid.png?raw=true")
 
 session.add(category3)
 session.commit()
@@ -105,7 +105,7 @@ category4 = Category(user_id=1, name="Daily Life",
                      description="Dreams that incorporate familiar faces and"
                      " places do not necessarily reveal hidden symbolic "
                      "messages from the subconscious. They are simply "
-                     "reflections of everyday life.")
+                     "reflections of everyday life.", image="https://github.com/megdollar/DreamApp/blob/master/images/daily_life.png?raw=true")
 
 session.add(category4)
 session.commit()
@@ -123,7 +123,7 @@ category5 = Category(user_id=1, name="Physiological",
                      description="Some dreams are said to be direct "
                      "reflections of our needs in the conscious world. For "
                      "example, a dream where the sleeper is shivering in "
-                     "the snow may simply mean an extra blanket is required.")
+                     "the snow may simply mean an extra blanket is required.", image="https://github.com/megdollar/DreamApp/blob/master/images/physiology.png?raw=true")
 
 session.add(category5)
 session.commit()
@@ -141,7 +141,7 @@ session.commit()
 category6 = Category(user_id=1, name="Problem Solving",
                      description="These dreams are designed to impart a "
                      "message to the sleeper that will aid them in "
-                     "overcoming a problem in their conscious life.")
+                     "overcoming a problem in their conscious life.", image="https://github.com/megdollar/DreamApp/blob/master/images/problem.png?raw=true")
 
 session.add(category6)
 session.commit()

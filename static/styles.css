@@ -250,30 +250,37 @@ header nav .miniPhoto {
 	text-align: center;
     -webkit-justify-content: center;
     justify-content: center;
+    align-items: stretch;
+    
 }
 
 .content .row {
 	width: 75%;
-	padding: 20px;
 	border-radius: 15px;
 	background-color: black;
-	margin: 15px;
-    vertical-align: text-top;
+    padding: 15px;
+    margin: 15px;
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    flex-direction: column;
 
 }
 
 .content h3{
 	font: normal 28px sans-serif;
-	margin-bottom: 40px;
+	margin-bottom: 15px;
 }
 .content p {
-	padding-bottom: 30px;
+	padding-bottom: 15px;
 	line-height: 1.6;
 }
 
 .content a.btn {
 	display: inline-block;
 	padding: 14px 20px;
+    margin-right: 5px;
+    margin-left: 0;
 }
 
 
@@ -299,10 +306,26 @@ header nav .miniPhoto {
 }
 
 .userPhoto{
+    margin: 0 auto;
 	height: 150px;
 	width: 150px;
 	border-radius: 15px;
     margin-bottom: 15px;
+}
+
+.catPhoto {
+    margin: 0 auto;
+    height: 75px;
+    width: 75px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+}
+
+.btnRow {
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 @media (max-width: 600px){
@@ -312,7 +335,7 @@ header nav .miniPhoto {
 	}
 
 }
-@media (min-width: 1000px){
+@media (min-width: 950px){
 
 	.content .row {
 		flex-basis: 30%;

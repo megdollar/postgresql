@@ -32,12 +32,14 @@
     <div class="row">
         <img class="userPhoto" src="{{i.user.picture}}">
 		<h3>{{i.title}}</h3>
-		<p> {{i.dream_date}}</p>
+		<p>{{i.dream_date}}</p>
 		<p>{{i.description}}</p>
-		<p>I awoke feeling {{i.emotion}}</p>
+		<p>Emotion: {{i.emotion}}</p>
 		<p>From the dream diary of {{i.user.name}}</p>
-		<a href="{{url_for('editDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
-		<a href="{{url_for('deleteDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
+		<div class="btnRow">
+            <a href="{{url_for('editDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
+            <a href="{{url_for('deleteDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
+        </div>
 	</div>
 	{% endfor %}
 	{% endif %}
