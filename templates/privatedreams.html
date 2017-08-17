@@ -10,6 +10,7 @@
 
 
 <section class="content">
+	<a href="{{url_for('newDream', category_id=category.id)}}" class="btn create"><i class="fa fa-plus"></i><span class="text-on-hover">Create</span></a>
 	<div class = 'flash'>
 	{% with messages = get_flashed_messages() %}
     	{% if messages %}         
@@ -23,24 +24,24 @@
 	</div>
 
 
-<div class="home">
-	<a href="{{url_for('newDream', category_id=category.id)}}" class="btn create"><span class="fa fa-plus"></span> Create</a>
+<!--<div class="home">-->
 
 {% if items !=[] %}	
 {% for i in items %}
-	<div class="main">
+<!--	<div class="main">-->
+    <div class="row">
+        <img class="userPhoto" src="{{i.user.picture}}">
 		<h3>{{i.title}}</h3>
 		<p> {{i.dream_date}}</p>
 		<p>{{i.description}}</p>
 		<p>I awoke feeling {{i.emotion}}</p>
-		<p>From the dream diary of {{creator.name}}</p>
-		<img src="{{creator.picture}}">
-		<a href="{{url_for('editDream', category_id=category.id, item_id=i.id)}}" class="btn"><span class="fa fa-plus"></span> Edit</a>
-		<a href="{{url_for('deleteDream', category_id=category.id, item_id=i.id)}}" class="btn"><span class="fa fa-trash"></span> Delete</a>
+		<p>From the dream diary of {{i.user.name}}</p>
+		<a href="{{url_for('editDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
+		<a href="{{url_for('deleteDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
 	</div>
 	{% endfor %}
 	{% endif %}
-</div>
+<!--</div>-->
 
 </section>
 

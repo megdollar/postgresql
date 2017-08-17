@@ -10,6 +10,7 @@
 
 
 <section class="content">
+    <a href="{{url_for('newCategory')}}" class="btn create"><i class="fa fa-plus"></i><span class="text-on-hover">Create</span></a>
 	<div class = 'flash'>
 	{% with messages = get_flashed_messages() %}
     	{% if messages %}         
@@ -20,22 +21,23 @@
         </ul>
         {% endif %}
     {% endwith %}
+
 	</div>
 
 
-	<div class="home">
-		<a href="{{url_for('newCategory')}}" class="btn create"><span class="fa fa-plus"></span> Create</a>
-
+<!--	<div class="home">-->
+ 
+<!--    <div class="main -->
 		{% for category in categories %}
-		<div class="main">
+		<div class="row">
 			<h3>{{category.name}}</h3>
 			<p>{{category.description}}</p>
-			<a href="{{url_for('deleteCategory', category_id=category.id)}}" class="btn"><span class="fa fa-trash"></span> Delete</a>
-			<a href="{{url_for('editCategory', category_id=category.id)}}" class="btn"><span class="fa fa-plus"></span> Edit</a>
-			<a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><span class="fa fa-eye"></span>View</a>
+            <a href="{{url_for('deleteCategory', category_id=category.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
+            <a href="{{url_for('editCategory', category_id=category.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
+            <a href="{{url_for('showDreams', category_id = category.id)}}" class="btn"><i class="fa fa-eye"></i><span class="text-on-hover">View</span></a>
 		</div>
 		{% endfor %}
-	</div>
+<!--	</div>-->
 </section>
 
 

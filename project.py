@@ -398,8 +398,8 @@ def deleteCategory(category_id):
 @app.route('/dreams/<int:category_id>/dream/')
 def showDreams(category_id):
     category = session.query(Category).filter_by(id=category_id).one()
-    creator = getUserInfo(category.user_id)
     items = session.query(Item).filter_by(category_id=category_id).all()
+    creator = getUserInfo(category.user_id)
     if 'username' not in login_session:
         return render_template('publicdreams.html', items=items,
                                category=category, creator=creator)
@@ -421,7 +421,7 @@ def newDream(category_id):
                            dream_date=datetime.datetime.strptime(
                            request.form['date'], '%Y-%m-%d'),
                            category_id=category_id,
-                           user_id=category.user_id)
+                           user_id=login_session['user_id'])
             session.add(newItem)
             session.commit()
             flash('New Dream Entry %s Successfully Created' % (newItem.title))
@@ -438,7 +438,7 @@ def editDream(category_id, item_id):
     category = session.query(Category).filter_by(id=category_id).one()
     if 'username' not in login_session:
         return redirect('/login')
-    if login_session['user_id'] != category.user_id:
+    if login_session['user_id'] != editedItem.user_id:
         flash('You are not authorized to edit this dream.'
               ' Please create your own dream to edit.')
         return redirect(url_for('showDreams', category_id=category_id))
@@ -469,7 +469,7 @@ def deleteDream(category_id, item_id):
     itemToDelete = session.query(Item).filter_by(id=item_id).one()
     if 'username' not in login_session:
         return redirect('/login')
-    if login_session['user_id'] != category.user_id:
+    if login_session['user_id'] != itemToDelete.user_id:
         flash('You are not authorized to delete this dream. '
               'Please create your own dream to delete.')
         return redirect(url_for('showDreams', category_id=category_id))
@@ -486,4 +486,3 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-    
