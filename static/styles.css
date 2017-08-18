@@ -120,10 +120,16 @@ header nav .miniPhoto {
     top: 15px;
     
 }
-@media screen and (max-width: 425px){
+@media screen and (max-width: 500px){
+    header {
+        padding-left: 15px;
+    }
     header nav .loginNav {
-    left: 0;
-    position: relative;
+       right: 15px;
+
+    }
+    header nav .miniPhoto {
+        display: none;
     }
 }
 
@@ -284,15 +290,15 @@ header nav .miniPhoto {
 }
 
 
-.content .text-on-hover {
+.text-on-hover {
     display: none;
 }
 
-.content a:hover i {
+a:hover i {
     display: none;
 }
 
-.content a:hover .text-on-hover{
+a:hover .text-on-hover{
     transition: all 0.2s ease-in-out;
     display: block;
     color: #fff;
@@ -432,3 +438,14 @@ form .btn, .row .btn {
 	margin: 0 auto;
 	margin-bottom: 20px;
 }
+
+/*----------------
+ 	Upload Section
+----------------*/
+
+.uploadBtn {
+    display: inline;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+

@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<section class="pane">
+	<div class="title">
+		<h1>Upload Image</h1>
+	</div>
+</section>
+      <div class="row">      
+          <form action="" method="post" enctype="multipart/form-data">
+              <div class="form uploadForm">
+                    <label class="btn uploadBtn">Browse 
+                      <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                        <input type="file" name="file" style="display: none;">
+                   </label>
+                    <label class="btn uploadBtn">Upload 
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        <input class="uploadBtn" type="submit" value="Upload" style="display: none;">
+                  </label>
+              </div>
+          </form>
+         <a href = '{{url_for('showCategories')}}'><button class="btn">
+            <span class="fa fa-ban"></span>Cancel</button></a>
+      </div>
+
+
+{% endblock %}
