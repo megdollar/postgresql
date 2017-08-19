@@ -387,7 +387,7 @@ def newCategory():
         newCategory = Category(
             name=request.form['name'], description=request.form['description'],
             image=request.form['image'],
-            upload=request.form['filename'],
+            upload=request.files['file'].filename,
             user_id=login_session['user_id'])
         session.add(newCategory)
         flash('New dream category %s successfully created' % newCategory.name)

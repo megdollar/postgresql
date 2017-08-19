@@ -31,7 +31,7 @@
 		{% for category in categories %}
 		<div class="row">
            {% if upload %}
-            <img class="catPhoto" src="{{url_for('uploaded_file', filename={{ category.upload }}>
+            <img class="catPhoto" src="{{url_for('uploaded_file', filename= category.upload )}}">
             {% else %}
             <img class="catPhoto" src="{{category.image}}">
             {% endif %}
