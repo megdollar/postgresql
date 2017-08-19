@@ -45,7 +45,6 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
     
 # Route that will process the file upload
-@app.route('/dreams/upload/', methods=['GET','POST'])
 def upload():
     if request.method == 'POST':
     # Get the name of the uploaded file
@@ -59,9 +58,8 @@ def upload():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         # Redirect the user to the uploaded_file route, which
         # will basicaly show on the browser the uploaded file
-            return redirect(url_for('uploaded_file',
-                                filename=filename))
-    return render_template('upload.html')
+#            return redirect(url_for('uploaded_file',
+#                                filename=filename))
     
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
@@ -389,6 +387,7 @@ def newCategory():
         newCategory = Category(
             name=request.form['name'], description=request.form['description'],
             image=request.form['image'],
+            upload=request.form['filename'],
             user_id=login_session['user_id'])
         session.add(newCategory)
         flash('New dream category %s successfully created' % newCategory.name)

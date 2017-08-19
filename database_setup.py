@@ -22,6 +22,7 @@ class Category(Base):
     name = Column(String(100), nullable=False)
     description = Column(String(250))
     image = Column(String(500))
+    upload = Column(String(500))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 

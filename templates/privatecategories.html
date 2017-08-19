@@ -30,7 +30,11 @@
 <!--    <div class="main -->
 		{% for category in categories %}
 		<div class="row">
+           {% if upload %}
+            <img class="catPhoto" src="{{url_for('uploaded_file', filename={{ category.upload }}>
+            {% else %}
             <img class="catPhoto" src="{{category.image}}">
+            {% endif %}
 			<h3>{{category.name}}</h3>
 			<p>{{category.description}}</p>
             <div class="btnRow">
