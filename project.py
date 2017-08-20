@@ -384,6 +384,8 @@ def newCategory():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
+        if request.files['file']:
+            upload()
         newCategory = Category(
             name=request.form['name'], description=request.form['description'],
             image=request.form['image'],
