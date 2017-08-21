@@ -61,7 +61,7 @@ class Item(Base):
             'dream_date': self.dream_date
         }
 
-engine = create_engine('sqlite:///dreamswithusers.db')
+engine = create_engine('postgresql://catalog:catalog@localhost/dreamApp')
 
 
 Base.metadata.create_all(engine)
