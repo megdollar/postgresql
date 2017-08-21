@@ -33,7 +33,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Dream Catalog"
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///dreamswithusers.db')
+engine = create_engine('postgresql://catalog:catalog@localhost/dreamApp')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
