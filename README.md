@@ -1,26 +1,40 @@
 # DreamApp
 
 ### About the Dream App:
-Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity.com/nanodegrees/nd004/parts/8d3e23e1-9ab6-47eb-b4f3-d5dc7ef27bf0/modules/bc51d967-cb21-46f4-90ea-caf73439dc59/lessons/262a84d7-86dc-487d-98f9-648aa7ca5a0f/concepts/079be127-2d22-4c62-91a8-aa031e760eb0) this is a RESTful web application utilizing the Flask framework which accesses a SQL database that populates dream categories and their items. OAuth2 provides authentication for further CRUD functionality on the application. 
+Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity.com/nanodegrees/nd004/parts/8d3e23e1-9ab6-47eb-b4f3-d5dc7ef27bf0/modules/bc51d967-cb21-46f4-90ea-caf73439dc59/lessons/262a84d7-86dc-487d-98f9-648aa7ca5a0f/concepts/079be127-2d22-4c62-91a8-aa031e760eb0) this is a RESTful web application utilizing the Flask framework which accesses a SQL database that populates dream categories and their items. OAuth2 provides authentication for further CRUD functionality on the application. Hosted on Amazon Lightsail using an Ubuntu instance.
 
-### Getting Set Up:
+### Server Details:
+* IP address: `18.220.131.73`
+* URL: `http://ec2-18-220-131-73.us-east-2.compute.amazonaws.com/dreams/?category_id=8#`
+* SSH PORT: 2200
 
-### System Requirements:
-1. [Python3](https://www.python.org/)
-2. [Vagrant](https://www.vagrantup.com/)
-  * This is the software that configures the Virtual machine
-3. [Virtual Box](https://www.virtualbox.org/)
-  * This is the software that actually runs the virtual machine
-  * Allows you to share files between the VM filesystem and your host computer
-  * Install the platform package for your OS
-  * Don't launch after installing, Vagrant handles this for you
- 4. [Udacity Vagrant Machine](https://github.com/udacity/fullstack-nanodegree-vm)
+### Getting Setup:
+1. Initially connect with instance after downloading default key pair:
+   `ssh -i ~/Downloads/LightsailDefaultPrivateKey-us-east-2.pem ubuntu@18.220.131.73`
+2. Change Privellages so group and order cannot read the key pair:
+   `chmod go -r ~/Downloads/LightsailDefaultPrivateKey-us-east-2.pem`
+3. Updates:
+   * Update package source list: `sudo apt-get update`
+   * Update software: `sudo apt-get upgrade`
+   * Remove any unneccesary packages: `sudo apt-get autoremove`
+4. Install finger
+   `sudo apt-get install finger`
+5. Create new user 'Grader':
+   `sudo add user grader`
+   add password
+6. Give user grader to sudo group
+   `sudo usermod -aG sudo grader`
+7. Switch to user
+   `su -grader`
 
-### Project Setup:
-1. Install Python3 
-2. Install Vagrant
-3. Install Virtual Box
-4. Download or clone the Udacity Vagrant Machine repository and place it in the vagrant directory
+### Add Key-based Authentication:
+*You will need two terminal windows, one as grader logged into instance and one local outside of the server*
+1. Generate key in local machine (outside of ubuntu)
+   `ssh-keygen`
+   * When prompted, save file to: /users/'yourusername'/.ssh/lightsailApp
+   * Add passphrase: 'udacity course'
+   
+
 
 ### Launch the VM:
 1. Inside the Vagrant directory downloaded from the full-stack-nanodegree-vm run this command in your terminal
