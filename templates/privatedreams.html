@@ -39,6 +39,7 @@
 		<div class="btnRow">
             <a href="{{url_for('editDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-pencil-square-o"></i><span class="text-on-hover">Edit</span></a>
             <a href="{{url_for('deleteDream', category_id=category.id, item_id=i.id)}}" class="btn"><i class="fa fa-trash"></i><span class="text-on-hover">Delete</span></a>
+            <a href="{{url_for('showCategories')}}" class="btn"><i class="fa fa-home"></i><span class="text-on-hover">Home</span></a>
         </div>
 	</div>
 	{% endfor %}

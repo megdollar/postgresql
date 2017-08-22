@@ -1,3 +1,4 @@
+
 /*-------------
  	General
 -------------*/
@@ -193,7 +194,7 @@ header nav .miniPhoto {
 }
 @media screen and (max-width: 500px){
     .hero h1 {
-        margin-top: 40px;
+        margin-top: 40%;
     }  
 }
 
@@ -226,6 +227,12 @@ header nav .miniPhoto {
 	margin-top: 20%;
 	font: bold 48px 'Open Sans', sans-serif;
 	margin-bottom: 15px;
+}
+
+@media screen and (max-width: 500px){
+    .pane h1 {
+        margin-top: 40%;
+    }  
 }
 
 
@@ -294,17 +301,6 @@ header nav .miniPhoto {
     display: none;
 }
 
-a:hover i {
-    display: none;
-}
-
-a:hover .text-on-hover{
-    transition: all 0.2s ease-in-out;
-    display: block;
-    color: #fff;
-    text-transform: capitalize;
-}
-
 
 .create {
     float: right;
@@ -333,15 +329,27 @@ a:hover .text-on-hover{
     align-items: flex-end;
     justify-content: center;
 }
+@media screen and (min-width: 601px){
+    a:hover i {
+        display: none;
+    }
 
-@media (max-width: 600px){
+    a:hover .text-on-hover{
+        transition: all 0.2s ease-in-out;
+        display: block;
+        color: #fff;
+        text-transform: capitalize;
+    }
+}
+
+@media screen and (max-width: 600px){
 
 	.content .row{
 		flex-basis: 100%;
 	}
 
 }
-@media (min-width: 950px){
+@media screen and (min-width: 950px){
 
 	.content .row {
 		flex-basis: 30%;
@@ -448,4 +456,5 @@ form .btn, .row .btn {
     margin: 0 auto;
     margin-bottom: 15px;
 }
+
 

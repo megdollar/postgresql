@@ -22,14 +22,12 @@ from werkzeug import secure_filename
 app = Flask(__name__)
 
 # This is the path to the upload directory
-app.config['UPLOAD_FOLDER'] = 'images/uploads/'
+app.config['UPLOAD_FOLDER'] = '/images/uploads/'
 # These are the extension that we are accepting to be uploaded
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
-
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open('/var/www/DreamApp/DreamApp/client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Dream Catalog"
 
 # Connect to Database and create database session
@@ -90,9 +88,9 @@ def fbconnect():
     # Exchange client token for long-lived server-side token with GET
     # /oauth/access_token?grant_type=fb_exchange_token&client_id={app-
     # id}&client_secret={app-secret}&fb_exchange_token={short-lived-token}
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read()
+    app_id = json.loads(open('/var/www/DreamApp/DreamApp/fb_client_secrets.json', 'r').read()
                         )['web']['app_id']
-    app_secret = json.loads(open('fb_client_secrets.json', 'r').read()
+    app_secret = json.loads(open('/var/www/DreamApp/DreamApp/fb_client_secrets.json', 'r').read()
                             )['web']['app_secret']
     url = 'https://graph.facebook.com/v2.9/oauth/access_token?'\
           'grant_type=fb_exchange_token&client_id=%s&client_secret=%s'\
@@ -192,7 +190,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets('/var/www/DreamApp/DreamApp/client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
