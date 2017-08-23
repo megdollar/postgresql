@@ -99,8 +99,9 @@ Select time
    * Change the line that says local all all peer, to local all all md5*
 2. Remove old .conf file
    `sudo a2dissite /etc/apache2/sites-enables/000-default.conf`
-3. Restart postgres
+3. Restart postgres & apache
    `sudo service postgresql restart`
+   `sudo service apache2 restart`
 4. Install flask, SQLALlchemy, etc:
    `sudo apt-get install python-psycopg2 python-flask`
    `sudo apt-get install python-sqlalchemy python-pip`
@@ -110,9 +111,36 @@ Select time
 5. Install git
    `sudo apt-get install git`
 
+### Use GIT to clone the repository for the catalog app:
+1. Logged in as grader cd to the second level app
+   `cd /var/www/DreamApp/DreamApp`
+    `git init`
+    `git remote add origing 'xxxx'` (path to repo)
+    `git fetch`
+    `git reset origin/master`
+    `git checkout -t origin master`
 
+### Change reference to locations in __init__.py:
+1. Change to  `/var/www/DreamApp/DreamApp/'xxxx'` use this for any references to path in the file
 
+### Update .wsgi File:
+1. change 'Server Name' to the DNS `ec2-18-220-131-73.us-east.compute-1.amazonaws.com` 
+2. The catalog app should now be available at `http://18-220-131-73` and `http://ec2-18-220-131-73.us-east-2.compute.amazonaws.com`
 
+### Update Google OAuth client secrets:
+1. Also change the javascript_origins field to the IP address and AWS assigned URL of the host. In this instance that would be: "javascript_origins":["http://18.220.131.73", "http://ec2-18-220-131-73.us-east-2.compute.amazonaws.com"]
+2. Fill in the `client_id` and `client_secret` fields in the file `client_secrets.json`. 
+
+* These addresses also need to be entered into the Google Developers Console -> API Manager -> Credentials, in the web client under "Authorized JavaScript origins". *
+
+### Update Facebook OAuth client secrets:
+1. In the Facebook developers website, in the "Advanced" tab, in the "Client OAuth Settings" section, add http://ec2-18-220-131-73.us-west-2.compute.amazonaws.com and http://18-220-131-73 to the "Valid OAuth redirect URIs" field. Then save these changes.
+2. In the file `fb_client_secrets.json`, fill in the `app_id` and `app_secret` fields with the correct values.
+
+### App specific changes:
+1. In order to allow image uploads, change ownership of directory `/images/uploads` to the www-user:
+   `sudo chown www-data:www-data /var/www/DreamApp/DreamApp/images/uploads`
+   
 
 
 
