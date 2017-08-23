@@ -77,7 +77,44 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
 `sudo dpkg-reconfigure tzdata`
 Select time
 
-### Install Apache:
+### Install Apache & WSGI:
 `sudo apt-get install apache2`
+`sudo 2enmod wsgi`
+* The next steps relied heavily on this [DigitalOcean tutorial](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps#step-four-%E2%80%93-configure-and-enable-a-new-virtual-host), although the steps with implementing a virtual environment were omitted. Follow the tutorial. *
+
+### Install PostgreSQL:
+`sudo apt-get install postgresql`
+1. Log into Postgres
+   `sudo -u postgresql psql`
+2. Create new user 'catalog'
+   `CREATE USER catalog WITH PASSWORD 'xxxxx';` (enter password)
+3. Create DB and give ownership to catalog user
+   `CREATE DATABASE dreamApp OWNER catalog;`
+4. Allow catalog user to Create, read, update, delete
+   `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA PUBLIC TO catalog;`
+
+### Exit postgres and make further changes:
+1. Ensure remote connections to PostgreSQL are not allowed
+   `sudo nano /etc/postgresql/9.5/main/pg_hba.conf` 
+   * Change the line that says local all all peer, to local all all md5*
+2. Remove old .conf file
+   `sudo a2dissite /etc/apache2/sites-enables/000-default.conf`
+3. Restart postgres
+   `sudo service postgresql restart`
+4. Install flask, SQLALlchemy, etc:
+   `sudo apt-get install python-psycopg2 python-flask`
+   `sudo apt-get install python-sqlalchemy python-pip`
+   `sudo pip install oauth2client`
+   `sudo pip install requests`
+   `sudo pip install httplib2`
+5. Install git
+   `sudo apt-get install git`
+
+
+
+
+
+
+
 
 
