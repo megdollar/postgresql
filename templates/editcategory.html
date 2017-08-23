@@ -15,16 +15,14 @@
 					    <input type ="text" class="form-control" maxlength="100" name="name" value="{{category.name}}">
 					<label for="description">Description:</label>
 					    <textarea class="form-control" maxlength="250" rows="5" name="description">{{category.description}}</textarea>
+				    <h3>Supply a link to an image or upload an image for the category</h3><br>
 				    <label for="image">Image URL:</label>
 					    <input type ="url" class="form-control" maxlength="500" name="image">
 				    <label class="btn uploadBtn">Browse 
                                            <i class="fa fa-folder-open-o" aria-hidden="true"></i>
                                            <input type="file" name="file" style="display: none;">
                                     </label>
-                                    <label class="btn uploadBtn">Upload 
-                                           <i class="fa fa-upload" aria-hidden="true"></i>
-                                           <input class="uploadBtn" type="submit" value="Upload" style="display: none;">
-                                     </label>
+                            
 					<button type="submit" class="btn" id="submit" type="submit">
 					<span class="fa fa-plus" aria-hidden="true"></span> Save</button>
 				</div>

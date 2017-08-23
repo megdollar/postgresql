@@ -22,7 +22,7 @@ from werkzeug import secure_filename
 app = Flask(__name__)
 
 # This is the path to the upload directory
-app.config['UPLOAD_FOLDER'] = '/images/uploads/'
+app.config['UPLOAD_FOLDER'] = '/var/www/DreamApp/DreamApp/images/uploads/'
 # These are the extension that we are accepting to be uploaded
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -58,6 +58,7 @@ def upload():
         # will basicaly show on the browser the uploaded file
 #            return redirect(url_for('uploaded_file',
 #                                filename=filename))
+            return filename
     
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
@@ -414,6 +415,8 @@ def editCategory(category_id):
             editedCategory.description = request.form['description']
         if request.form['image']:
             editedCategory.image = request.form['image']
+        if request.files['file']:
+            editedCategory.upload = request.files['file'].filename
         flash('Category successfully edited %s' % editedCategory.name)
         return redirect(url_for('showCategories'))
     else:
