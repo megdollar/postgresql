@@ -33,48 +33,51 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
    `ssh-keygen`
    * When prompted, save file to: /users/'yourusername'/.ssh/lightsailApp
    * Add passphrase: 'udacity course'
+2. Add public key to remote server, as grader logged into server type:
+   `mkdir .ssh`
+   `touch .ssh/authorized_keys`
+3. Copy the files from local dir `.ssh/lightsailApp.pub` into the file `.ssh/authorized_keys` in the server
+4. Add security file permissions for grader
+   `chmod 700 .ssh`
+   `chmod 644 .ssh/authorized_keys`
+5. Log in as grader using this command:
+   `ssh grader@18.220.131.73 -p22 -i ~/.ssh/lightsailApp`
+
+### Change Port & Disable Password Login:
+*Add custom tcp 2200 port to Lightsail application*
+1. Navigate to sshd_config
+   `sudo nano /etc/ssh/sshd_config`
+   *Change line `Port 22` to `Port 2200`*
+   *Uncomment line `PasswordAuthentication no`*
+2. Restart sshd service
+  `servce ssh restart`
+3. Log in with new port
+   `ssh grader@18.220.131.73 -p2200 -i ~/.ssh/lightsailApp`
    
+### Configure Firewall:
+1. Block all incoming ports
+   `sudo ufw default deny incoming`
+2. Allow outgoing connections on all ports
+   `sudo ufw allow outgoing`
+3. Allow incoming connections for SSH on port 2200:
+   `sudo ufw allow 2200/tcp`
+4. Allow incoming connections for HTTP on port 80:
+   `sudo ufw allow 80/tcp`
+   `sudo ufw allow www`
+5. Allow UDP 123:
+   `sudo allow 123/udp`
+6. Double check the rules before enabling
+   `sudo ufw show added`
+7. Enable firewall
+   `sudo ufw enable`
+8. Check status
+   `sudo ufw status`
+
+### Change Timezone to UTC:
+`sudo dpkg-reconfigure tzdata`
+Select time
+
+### Install Apache:
+`sudo apt-get install apache2`
 
 
-### Launch the VM:
-1. Inside the Vagrant directory downloaded from the full-stack-nanodegree-vm run this command in your terminal
-   `vagrant up`
-2. Log in to the VM 
-   `vagrant ssh`
-3. Change directory to the files and look around
-   `cd /vagrant' 'ls' `
-   
-### Set Up the Database:
-1. Load the data in the local database
-   `python database_setup.py`
-2. Populate the database
-   `python dreamFiles.py `
-
-### Set up Google Login:
-1. Log in to [Google Dev Console](https://console.developers.google.com/)
-2. Go to Credentials
-3. Select Create Crendentials > OAuth Client ID
-4. Select Web Application
-5. Enter name 'Dream Catalog'
-6. Under 'Authorized Javascript Origins add' `http://localhost:5000/`
-7. Authorized redirect URIs = 'http://localhost:5000/login' && 'http://localhost:5000/gconnect'
-8. Click create client ID
-9. Download JSON and save it as "client_secret.json" in the root directory (replace the existing)
-10. In main.html replace the line "data-clientid="#####.apps.googleusercontent.com" so that it uses your Client ID from the web applciation.
-
-### Set up Facebook Login:
-1. Log in to [Facebook Dev Console](https://developers.facebook.com/)
-2. Go to Dashboard
-3. Click `Add Product` on the bottom left of the page
-4. Add `facebook login`
-5. Click Client OAuth
-6. Add `http://localhost:5000/` to the Valid OAuth redirect URIs section
-7. Replace app_id and app_secret in fb_client_secrets.json file
-
-### Run the Application:
-1. From the vagrant direcotry inside the VM
-   `python project.py`
-2. Navigate to [http://localhost:5000/](http://localhost:5000/) in your browser
-
-### Exiting the VM
-To exit type `control + D`
