@@ -383,13 +383,14 @@ def newCategory():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        if request.files['file']:
-            upload()
         newCategory = Category(
-            name=request.form['name'], description=request.form['description'],
-            image=request.form['image'],
-            upload=request.files['file'].filename,
+            name=request.form['name'],
+            description=request.form['description'],
             user_id=login_session['user_id'])
+        if request.files['file']:
+            newCategory.upload = upload()
+        elif request.form['image']:
+            newCategory.image = request.form['image']
         session.add(newCategory)
         flash('New dream category %s successfully created' % newCategory.name)
         session.commit()
@@ -416,7 +417,7 @@ def editCategory(category_id):
         if request.form['image']:
             editedCategory.image = request.form['image']
         if request.files['file']:
-            editedCategory.upload = request.files['file'].filename
+            editedCategory.upload = upload()
         flash('Category successfully edited %s' % editedCategory.name)
         return redirect(url_for('showCategories'))
     else:
