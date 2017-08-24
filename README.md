@@ -4,13 +4,13 @@
 Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity.com/nanodegrees/nd004/parts/8d3e23e1-9ab6-47eb-b4f3-d5dc7ef27bf0/modules/bc51d967-cb21-46f4-90ea-caf73439dc59/lessons/262a84d7-86dc-487d-98f9-648aa7ca5a0f/concepts/079be127-2d22-4c62-91a8-aa031e760eb0) this is a RESTful web application utilizing the Flask framework which accesses a SQL database that populates dream categories and their items. OAuth2 provides authentication for further CRUD functionality on the application. Hosted on Amazon Lightsail using an Ubuntu instance.
 
 ### Server Details:
-* IP address: `18.220.131.73`
-* URL: `http://ec2-18-220-131-73.us-east-2.compute.amazonaws.com/dreams/?category_id=8#`
+* Static IP address: `18.220.157.253`
+* URL: `http://ec2-18-220-157-253.us-east-2.compute.amazonaws.com/dreams/?category_id=8#`
 * SSH PORT: 2200
 
 ### Getting Setup:
 1. Initially connect with instance after downloading default key pair:
-   `ssh -i ~/Downloads/LightsailDefaultPrivateKey-us-east-2.pem ubuntu@18.220.131.73`
+   `ssh -i ~/Downloads/LightsailDefaultPrivateKey-us-east-2.pem ubuntu@18.220.157.253`
 2. Change Privellages so group and order cannot read the key pair:
    `chmod go -r ~/Downloads/LightsailDefaultPrivateKey-us-east-2.pem`
 3. Updates:
@@ -52,7 +52,7 @@ Built as part of the [Udacity's Full Stack Nanodegree](https://classroom.udacity
 2. Restart sshd service
   `servce ssh restart`
 3. Log in with new port
-   `ssh grader@18.220.131.73 -p2200 -i ~/.ssh/lightsailApp`
+   `ssh grader@18.220.157.253 -p2200 -i ~/.ssh/lightsailApp`
    
 ### Configure Firewall:
 1. Block all incoming ports
@@ -134,7 +134,7 @@ Select time
 * These addresses also need to be entered into the Google Developers Console -> API Manager -> Credentials, in the web client under "Authorized JavaScript origins". *
 
 ### Update Facebook OAuth client secrets:
-1. In the Facebook developers website, in the "Advanced" tab, in the "Client OAuth Settings" section, add http://ec2-18-220-131-73.us-west-2.compute.amazonaws.com and http://18-220-131-73 to the "Valid OAuth redirect URIs" field. Then save these changes.
+1. In the Facebook developers website, in the "Advanced" tab, in the "Client OAuth Settings" section, add http://ec2-18-220-157-253.us-west-2.compute.amazonaws.com and http://18.220.157.253 to the "Valid OAuth redirect URIs" field. Then save these changes.
 2. In the file `fb_client_secrets.json`, fill in the `app_id` and `app_secret` fields with the correct values.
 
 ### App specific changes:
